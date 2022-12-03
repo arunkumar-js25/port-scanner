@@ -6,7 +6,10 @@ def get_open_ports(target, port_range, verbose = False):
     try:
       targetIP = socket.gethostbyname(target)
     except:
-      return "Error: Invalid IP address";
+      return "Error: Invalid hostname"
+
+    if targetIP == None:
+      return "Error: Invalid IP address"
 
     print(target)
     print(targetIP)
@@ -23,7 +26,7 @@ def get_open_ports(target, port_range, verbose = False):
     port = port_range[0]
     while(port >= port_range[0] and port <= port_range[1]):
       try:
-        if(s.connect_ex((target, port))==0):
+        if(s.connect_ex((targetIP, port))==0):
           open_ports.append(port)
           if(verbose):
             port_name = common_ports.ports_and_services.get(port)
@@ -31,7 +34,7 @@ def get_open_ports(target, port_range, verbose = False):
               verbose_return = verbose_return + "\n" + str(port).ljust(4) +"     "+port_name
         s.close()
       except:
-        return "Error: Invalid hostname";
+        return "Error: Invalid IP address";
       port=port+1
       
     if(verbose):
